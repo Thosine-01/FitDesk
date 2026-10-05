@@ -1,0 +1,46 @@
+/* Fitdesk design tokens — source of truth for every colour, radius and width.
+   Contrast ratios are measured (see brief §2). Do not adjust values. */
+:root {
+  color-scheme: light;
+
+  --accent: #0c6b3f; /* light surfaces: text, buttons */
+  --accent-hover: #0a5c36;
+  --accent-bright: #34d186; /* dark surfaces only — fails on light */
+  --accent-muted: rgba(12, 107, 63, 0.07);
+  --accent-border: rgba(12, 107, 63, 0.22);
+
+  /* supporting hues — tints and fills only, always with dark text on them */
+  --amber: #b45309;
+  --amber-tint: #fef3c7;
+  --coral: #b91c1c;
+  --coral-tint: #fee2e2;
+  --blue: #1d4ed8;
+  --blue-tint: #dbeafe;
+  --violet: #6d28d9;
+  --violet-tint: #ede9fe;
+
+  --bg-page: #fcfcfb;
+  --bg-surface: #f1f3f0;
+  --bg-card: #ffffff;
+  --bg-dark: #0f1511;
+  --border-subtle: rgba(17, 22, 20, 0.08);
+  --border-default: rgba(17, 22, 20, 0.15);
+  --border-rule: rgba(17, 22, 20, 0.16);
+
+  --text-primary: #111614;
+  --text-secondary: #404743;
+  --text-muted: #676e6a;
+  --text-on-dark: #f4f6f4;
+  --text-on-dark-sec: #c4cbc7;
+  --text-on-dark-muted: #9aa29d;
+  --border-on-dark: rgba(244, 246, 244, 0.13);
+
+  --max: 1180px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-full: 100px;
+
+  --elev-card: 0 14px 34px -18px rgba(17, 22, 20, 0.28);
+  --elev-mock: 0 24px 60px -28px rgba(17, 22, 20, 0.42);
+}

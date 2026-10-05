@@ -1,26 +1,370 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Tailwind v4 has no tailwind.config.ts — this block is the token mapping.
+   The default palette is cleared so only token colours exist as utilities
+   (no hex, no stray `bg-green-600`). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-*: initial;
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-border: var(--accent-border);
+
+  --color-amber: var(--amber);
+  --color-amber-tint: var(--amber-tint);
+  --color-coral: var(--coral);
+  --color-coral-tint: var(--coral-tint);
+  --color-blue: var(--blue);
+  --color-blue-tint: var(--blue-tint);
+  --color-violet: var(--violet);
+  --color-violet-tint: var(--violet-tint);
+
+  --color-page: var(--bg-page);
+  --color-surface: var(--bg-surface);
+  --color-card: var(--bg-card);
+  --color-dark: var(--bg-dark);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-rule: var(--border-rule);
+  --color-border-on-dark: var(--border-on-dark);
+
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-on-dark: var(--text-on-dark);
+  --color-on-dark-sec: var(--text-on-dark-sec);
+  --color-on-dark-muted: var(--text-on-dark-muted);
+
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-full: var(--r-full);
+
+  --container-page: var(--max);
+
+  --shadow-card: var(--elev-card);
+  --shadow-mock: var(--elev-mock);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Navbar collapses to the hamburger under 980px. */
+@theme {
+  --breakpoint-nav: 61.25rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px; /* clears the fixed navbar on anchor jumps */
+  }
+
+  body {
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+    letter-spacing: -0.006em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: clamp(42px, 6.6vw, 78px);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    font-variation-settings: "opsz" 32;
+  }
+
+  h2 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.032em;
+    font-variation-settings: "opsz" 32;
+  }
+
+  h3 {
+    font-size: 19.5px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.016em;
+    font-variation-settings: "opsz" 20;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Focus rings are never removed. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--accent-bright);
+  }
+  /* Light card inside a dark band (e.g. the highlighted price tier). */
+  .on-dark .on-light :focus-visible {
+    outline-color: var(--accent);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .on-dark .eyebrow {
+    color: var(--accent-bright);
+  }
+
+  .section {
+    padding: 92px 32px;
+  }
+  @media (max-width: 639px) {
+    .section {
+      padding: 66px 20px;
+    }
+  }
+
+  /* Prices and figures — columns of money align. */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Scroll reveal — driven by <RevealProvider /> in the root layout. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-d1 {
+    transition-delay: 80ms;
+  }
+  .reveal-d2 {
+    transition-delay: 160ms;
+  }
+  .reveal-d3 {
+    transition-delay: 240ms;
+  }
+
+  /* Hover lift: cards 4px, buttons 2px. */
+  .lift-card {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .lift-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--elev-card);
+  }
+  .lift-btn {
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .lift-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Hero overlay — dark only where the copy sits (bottom-left), so the photo
+     shows through on the right and top. Phones get an even tint because the
+     copy spans the full width there. */
+  .hero-scrim {
+    background:
+      linear-gradient(0deg, rgba(9, 14, 11, 0.62) 0%, rgba(9, 14, 11, 0) 55%),
+      linear-gradient(
+        90deg,
+        rgba(9, 14, 11, 0.78) 0%,
+        rgba(9, 14, 11, 0.5) 38%,
+        rgba(9, 14, 11, 0.12) 70%,
+        rgba(9, 14, 11, 0) 100%
+      );
+  }
+  @media (max-width: 639px) {
+    .hero-scrim {
+      background:
+        linear-gradient(
+          0deg,
+          rgba(9, 14, 11, 0.8) 0%,
+          rgba(9, 14, 11, 0.2) 70%
+        ),
+        rgba(9, 14, 11, 0.35);
+    }
+  }
+  .hero-scrim-top {
+    background: linear-gradient(
+      180deg,
+      rgba(9, 14, 11, 0.5),
+      rgba(9, 14, 11, 0) 22%
+    );
+  }
+  .hero-copy {
+    text-shadow: 0 1px 22px rgba(9, 14, 11, 0.45);
+  }
+  .hero-slide {
+    opacity: 0;
+    transform: scale(1.02);
+    transition: opacity 0.9s ease;
+  }
+  .hero-slide.is-active {
+    opacity: 1;
+  }
+  /* Same animation on active and leaving, so the zoom doesn't snap back mid-fade. */
+  .hero-slide.is-active,
+  .hero-slide.is-leaving {
+    animation: hero-zoom 6.1s linear forwards;
+  }
+  .hero-progress {
+    transform-origin: left;
+    animation: hero-progress 5.2s linear forwards;
+  }
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.02);
+    }
+    to {
+      transform: scale(1.09);
+    }
+  }
+  @keyframes hero-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* Commitment calculator ─────────────────────────────────────────────── */
+@layer components {
+  /* Range slider: fill driven by --pct, set from JS. */
+  .commit-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 28px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .commit-range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: var(--r-full);
+    background: linear-gradient(
+      to right,
+      var(--accent-bright) var(--pct, 0%),
+      var(--border-on-dark) var(--pct, 0%)
+    );
+  }
+  .commit-range::-moz-range-track {
+    height: 6px;
+    border-radius: var(--r-full);
+    background: var(--border-on-dark);
+  }
+  .commit-range::-moz-range-progress {
+    height: 6px;
+    border-radius: var(--r-full);
+    background: var(--accent-bright);
+  }
+  .commit-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: var(--accent-bright);
+    border: 4px solid var(--bg-dark);
+    box-shadow: 0 0 0 1px var(--accent-bright);
+  }
+  .commit-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-bright);
+    border: 4px solid var(--bg-dark);
+    box-shadow: 0 0 0 1px var(--accent-bright);
+  }
+  /* Ring clears the thumb. */
+  .commit-range:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 6px;
+    border-radius: var(--r-sm);
+  }
+
+  /* Borderless number input — the 2px underline lives on its wrapper. */
+  .commit-number {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  .commit-number::-webkit-outer-spin-button,
+  .commit-number::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Month count scales briefly on change. */
+  .commit-pop {
+    display: inline-block;
+    animation: commit-pop 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes commit-pop {
+    from {
+      transform: scale(1.12);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+}
+
+/* Reduced motion bypasses every animation, including the hero zoom and slideshow. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .lift-card:hover,
+  .lift-btn:hover {
+    transform: none;
+  }
+  .hero-slide,
+  .hero-progress,
+  .commit-pop {
+    animation: none !important;
+    transform: none;
+  }
 }
